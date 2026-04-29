@@ -1,0 +1,109 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Signup</title>
+
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+
+    <style>
+        body {
+            height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Vazir", sans-serif !important;
+            background: linear-gradient(135deg, #071a12, #0f2d1f, #144d36);
+        }
+
+        .login-box {
+            width: 380px;
+            padding: 40px;
+            border-radius: 16px;
+            background: rgba(20, 77, 54, 0.35);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+        }
+
+        .login-title {
+            text-align: center;
+            color: #b8ffd8;
+            margin-bottom: 30px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #7fd8a8;
+        }
+
+        .form-control {
+            background: rgba(0, 0, 0, 0.25);
+            border: 1px solid #2e6b4d;
+            color: white;
+            padding-right: 40px;
+            transition: all .25s;
+        }
+
+        .form-control:focus {
+            border-color: #39c487;
+            box-shadow: 0 0 0 3px rgba(57, 196, 135, 0.2);
+            transform: scale(1.02);
+        }
+
+        .btn-green {
+            background: linear-gradient(45deg, #1f7a53, #2fbf83);
+            border: none;
+            color: white;
+            font-weight: bold;
+        }
+
+        .btn-green:hover {
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-box" action="{% url 'accounts:signup' %}">
+
+        <h4 class="login-title">ایجاد حساب</h4>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <div class="mb-3 input-group">
+                <span class="input-icon">👤</span>
+                {{ form.username }}
+            </div>
+
+            <div class="mb-3 input-group">
+                <span class="input-icon">🔒</span>
+                {{ form.password1 }}
+            </div>
+
+            <div class="mb-3 input-group">
+                <span class="input-icon">🔒</span>
+                {{ form.password2 }}
+            </div>
+
+            <button type="submit" class="btn btn-green w-100">ثبت</button>
+
+        </form>
+
+    </div>
+
+</body>
+
+</html>

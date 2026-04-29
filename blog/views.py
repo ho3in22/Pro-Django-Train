@@ -1,7 +1,10 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 # from django.http import HttpResponse, JsonResponse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from blog.models import *
+from blog.forms import *
+from django.contrib import messages
+
 
 # Create your views here.
 def blog_view(request, **kwargs):
@@ -34,10 +37,23 @@ def blog_view(request, **kwargs):
 def blog_single(request, pid):
     # posts = Post.objects.filter(status=1)
     # post = get_object_or_404(posts,pk = pid)
-
+    
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid() :
+            form.save()
+            messages.add_message(request, messages.SUCCESS, 'Your Comment added !')
+        else :
+            messages.add_message(request, messages.ERROR, 'Your Comment DID NOT added !')
+    
     post = get_object_or_404(Post,pk = pid, status = 1)
-    context = {'post' : post}
-    return render(request, 'blog/blog-single.html', context)
+    if not post.login_require :
+        comments = Comment.objects.filter(post=post.id, approved=True) #.order_by('-created_date')    added in model Meta class
+        form = CommentForm()
+        context = {'post' : post, 'comments' : comments, 'form' : form}
+        return render(request, 'blog/blog-single.html', context)
+    else :
+        return redirect('accounts:login')
 
 # def blog_category(request, cat_name):
 #     posts = Post.objects.filter(status=1)
